@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Guess Word</title>
+    <style>
+      body {
+        display: flex;
+        justify-content: space-around;
+        background-image: url(back.jpg);
+        background-size: cover;
+        background-position: center;
+      }
+
+      .body {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .hidden {
+        display: none;
+      }
+
+      #button {
+        background-color: #4caf50;
+        border: none;
+        color: white;
+        padding: 16px 32px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 16px;
+        margin: 4px 2px;
+        transition-duration: 0.4s;
+        cursor: pointer;
+        background-color: white;
+        color: black;
+        border: 2px solid #4caf50;
+      }
+
+      #button:hover {
+        background-color: #4caf50;
+        color: white;
+      }
+
+      #errors {
+        font-size: 20px;
+        width: 50%;
+        text-align: center;
+        padding: 10px;
+        margin: 10px;
+        line-height: 1.8;
+        border-radius: 5px;
+        font-family: 'Times New Roman', Times, serif;
+        font-weight: 400;
+        direction: rtl;
+      }
+
+      h1 {
+        font-family: Satisfy, cursive;
+        font-size: 5em;
+        margin: 2rem 0;
+        color: SandyBrown;
+        text-shadow: 0.02em 0.02em 0 Brown, 0 0 0.5em violet;
+      }
+
+      h3 {
+        text-shadow: 0px -1px 4px white, 0px -2px 10px yellow,
+          0px -10px 20px #ff8000, 0px -18px 40px red, 0px 1px 4px white,
+          0px 2px 10px yellow, 0px 10px 20px #ff8000, 0px 18px 40px red,
+          1px 0px 4px white, 2px 0px 10px yellow, 10px 0px 20px #ff8000,
+          18px 0px 40px red, -1px 0px 4px white, -2px 0px 10px yellow,
+          -10px 0px 20px #ff8000, -18px 0px 40px red;
+      }
+      .message {
+        color: SandyBrown;
+        text-shadow: 0.02em 0.02em 0 Brown, 0 0 0.5em violet;
+        font-size: 25px;
+        font-weight: bold;
+        margin: 10px;
+        width: 25%;
+        text-align: center;
+        padding: 1rem;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="body">
+      <h1><< بازی حدس کلمات >></h1>
+      <h3>برای شروع بازی بر روی دکمه ی زیر کلیک کنید</h3>
+      <div class="message"></div>
+      <button type="button" id="button">Start</button>
+      <input type="text" class="hidden" />
+      <p id="errors"></p>
+    </div>
+    <script>
+      const message = document.querySelector(".message");
+      const guess = document.querySelector("input");
+      const button = document.querySelector("button");
+      const errors = document.querySelector("#errors");
+      const myArray = [
+        "ایمان",
+        "پرهام",
+        "سارا",
+        "رضا",
+        "مینا",
+        "محسن",
+        "محمد",
+        "عماد",
+      ];
+      let inPlay = false;
+      let scramble = "";
+      let scrambled = "";
+      let score = 0;
+      button.addEventListener("click", function () {
+        if (!inPlay) {
+          inPlay = true;
+          button.innerHTML = "Guess";
+          guess.classList.toggle("hidden");
+          guess.style.padding = "14px 20px";
+          guess.style.outline = "none";
+          guess.style.border = "2px solid #b9b9f3";
+          guess.style.width = "40%";
+          guess.style.margin = "2rem 0";
+          guess.style.fontSize = "18px";
+          guess.style.textAlign = "center";
+          message.style.border = "1px solid gainsboro";
+          message.style.backgroundColor = "beige";
+          guess.value = "";
+          scramble = createWord();
+          scrambled = randomArray(scramble.split("")).join("");
+          message.innerHTML = scrambled;
+          errors.innerHTML = "";
+          errors.style = "none";
+        } else {
+          let tempGuess = guess.value;
+          score++;
+          if (tempGuess === scramble) {
+            inPlay = false;
+            errors.innerHTML =
+              "آفرین جواب درست  " + scramble + "  بود و " + score + " خطا داشتی";
+
+            errors.style.border = "1px solid #DED";
+            errors.style.backgroundColor = "#EFE";
+            errors.style.color = "#9AA";
+            button.innerHTML = "Start";
+            guess.classList.toggle("hidden");
+          } else {
+            errors.innerHTML = "پاسخ شما اشتباه است";
+            errors.style.border = "1px solid #feec6f";
+            errors.style.backgroundColor = "#fdf7df";
+            errors.style.color = "#c9971c";
+          }
+        }
+      });
+
+      function createWord() {
+        let randomIndex = Math.floor(Math.random() * myArray.length);
+        let tempWord = myArray[randomIndex];
+        return tempWord;
+      }
+
+      function randomArray(arr) {
+        for (let i = arr.length - 1; i > 0; i--) {
+          let temp = arr[i];
+
+          let j = Math.floor(Math.random() * (i + 1));
+          arr[i] = arr[j];
+          arr[j] = temp;
+        }
+        return arr;
+      }
+    </script>
+  </body>
+</html>
